@@ -10,41 +10,38 @@ public class db_search {
         String password = "TCB3542187*";
         while (true) {
             try (Connection conn = DriverManager.getConnection(JDBCURL, username, password)) {
-                // »ç¿ëÀÚ ÀÔ·ÂÀ» ¹Ş¾Æ ¿µÈ­ Á¦¸ñ °Ë»ö
+                // ì‚¬ìš©ì ì…ë ¥ì„ ë°›ì•„ ì˜í™” ì œëª© ê²€ìƒ‰
                 Scanner s = new Scanner(System.in);
-                System.out.print("¿µÈ­ Á¦¸ñ ÀÔ·Â :");
+                System.out.print("ì˜í™” ì œëª© ì…ë ¥ :");
                 String searchTitle = s.nextLine();
-                if (searchTitle.equals("Á¾·á")) break;
-                // SQL Äõ¸® ÀÛ¼º
-                String query = "SELECT m.title, m.genres, AVG(r.rating) AS averageRating, t.tag " +
-                        "FROM movies m " +
-                        "JOIN ratings r ON m.movieId = r.movieId " +
-                        "JOIN tags t ON m.movieId = t.movieId " +
-                        "WHERE m.title LIKE ? " +
-                        "GROUP BY m.title, m.genres, t.tag";
+                if (searchTitle.equals("ì¢…ë£Œ")) break;
+                // SQL ì¿¼ë¦¬ ì‘ì„±
+                 String query = "SELECT m.title, m.genres, AVG(r.rating) AS averageRating " +
+                        "FROM ratings r " +
+                        "JOIN movies m ON r.movieId = m.movieId " +
+                        "WHERE m.title LIKE ? " +  
+                        "GROUP BY m.title, m.genres";
 
-                // PreparedStatement¸¦ »ç¿ëÇÏ¿© SQL Äõ¸® ÁØºñ
+                // PreparedStatementë¥¼ ì‚¬ìš©í•˜ì—¬ SQL ì¿¼ë¦¬ ì¤€ë¹„
                 PreparedStatement preparedStatement = conn.prepareStatement(query);
                 preparedStatement.setString(1, "%" + searchTitle + "%");
 
-                // Äõ¸® ½ÇÇà ¹× °á°ú °Ë»ö
+                // ì¿¼ë¦¬ ì‹¤í–‰ ë° ê²°ê³¼ ê²€ìƒ‰
                 ResultSet resultSet = preparedStatement.executeQuery();
 
-                // °á°ú Ãâ·Â
+                // ê²°ê³¼ ì¶œë ¥
                 boolean found = false;
                 while (resultSet.next()) {
                     String title = resultSet.getString("title");
                     String genres = resultSet.getString("genres");
                     double averageRating = resultSet.getDouble("averageRating");
-                    String tag = resultSet.getString("tag");
-                    System.out.println("Á¦¸ñ: " + title);
-                    System.out.println("Àå¸£: " + genres);
-                    System.out.println("ÆòÁ¡: " + averageRating);
-                    System.out.println("ÅÂ±×: " + tag+"\n");
+                    System.out.println("ì œëª©: " + title);
+                    System.out.println("ì¥ë¥´: " + genres);
+                    System.out.println("í‰ì : " + averageRating);
                     found = true;
                 }
                 if (!found) {
-                    System.out.println(searchTitle + "¿¡ ÇØ´çÇÏ´Â ¿µÈ­°¡ ¾ø½À´Ï´Ù.");
+                    System.out.println(searchTitle + "ì— í•´ë‹¹í•˜ëŠ” ì˜í™”ê°€ ì—†ìŠµë‹ˆë‹¤.");
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
