@@ -1,0 +1,96 @@
+.user-info-ID {
+    position: relative;
+    margin-top: 21px;
+}
+
+.user-info-ID .input-wrapper {
+    position: relative;
+    width: 100%;
+    height: 40px;
+}
+
+.user-info-ID input[type="ID"] {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    outline: none;
+    font-size: 16px;
+}
+
+.blur-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(5px);
+    z-index: -1;
+}
+
+.already-member {
+    margin-top: 20px;
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+.already-member button {
+    margin-left: 5px;
+    color: #FF0558;
+}
+
+.btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 60px;
+    width: 470px;
+    height: 53px;
+    border-top: 1px solid #e6e6e6;
+    overflow: hidden;
+    text-align: center;
+}
+
+button {
+    margin-top: 0;
+    width: 100%;
+    height: 100%;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 21px;
+    text-align: center;
+    color: #ffffff;
+    background-color: #0068ff;
+    border: none;
+    border-radius: 10px;
+}
+
+
+.btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 60px;
+    width: 470px;
+    height: 53px;
+    border-top: 1px solid #e6e6e6;
+    overflow: hidden;
+    text-align: center;
+}
+
+button {
+    margin-top: 0;
+    width: 100%;
+    height: 100%;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 21px;
+    text-align: center;
+    color: #ffffff;
+    background-color: #0068ff;
+    border: none;
+    border-radius: 10px;
+}
