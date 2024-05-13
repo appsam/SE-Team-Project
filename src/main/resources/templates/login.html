@@ -4,14 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="|${pageName}|"></title>
-    <style>
-        .error-class {
-            color: red;
-        }
-        .error-input {
-            border-color: red;
-        }
-    </style>
 </head>
 <body>
 <div>
@@ -19,7 +11,7 @@
     <h2>로그인</h2>
     <form th:method="post" th:action="|@{/{loginType}/login (loginType=${loginType})}|" th:object="${loginRequest}">
         <div>
-            <label th:for="loginId">로그인 아이디 : </label>
+            <label th:for="loginId">ID : </label>
             <input type="text" th:field="*{loginId}"/>
         </div>
         <br/>
@@ -38,3 +30,12 @@
 </div>
 </body>
 </html>
+
+<style>
+    .error-class {
+        color: red;
+    }
+    .error-input {
+        border-color: red;
+    }
+</style>

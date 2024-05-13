@@ -12,3 +12,11 @@ spring:
       hibernate:
         format_sql: true #ture 최초 1회
         show_sql: true
+
+  logging:
+      level:
+        com.tutorial: debug
+
+  jwt:
+    header: Authorization
+    secret: secretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKey
