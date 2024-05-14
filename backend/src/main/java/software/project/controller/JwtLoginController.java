@@ -2,6 +2,8 @@ package software.project.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,39 +18,19 @@ import software.project.dto.LoginRequest;
 import software.project.service.MemberService;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/jwt-login")
+@CrossOrigin(origins = "http://localhost:5173")
 public class JwtLoginController {
 
     private final MemberService memberService;
     private final JwtUtil jwtUtil;
 
-    @GetMapping(value = {"", "/"})
-    public String home(Model model) {
-
-        model.addAttribute("loginType", "jwt-login");
-        model.addAttribute("pageName", "스프링 시큐리티 JWT 로그인");
-
-        String loginId = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        Iterator<? extends GrantedAuthority> iter = authorities.iterator();
-        GrantedAuthority auth = iter.next();
-        String role = auth.getAuthority();
-
-        Member loginMember = memberService.getLoginMemberByLoginId(loginId);
-
-        if (loginMember != null) {
-            model.addAttribute("name", loginMember.getName());
-        }
-
-        return "home";
-    }
 
     @GetMapping("/join")
     public String joinPage(Model model) {
@@ -62,28 +44,32 @@ public class JwtLoginController {
     }
 
     @PostMapping("/join")
-    public String join(@Valid @ModelAttribute JoinRequest joinRequest,
-                       BindingResult bindingResult, Model model) {
+    public ResponseEntity<Map<String,Object>> join(@Valid @RequestBody JoinRequest joinRequest,
+                                            BindingResult bindingResult) {
 
-        model.addAttribute("loginType", "jwt-login");
-        model.addAttribute("pageName", "스프링 시큐리티 JWT 로그인");
+        Map<String, Object> response = new HashMap<>();
 
         // ID 중복 여부 확인
         if (memberService.checkLoginIdDuplicate(joinRequest.getLoginId())) {
-            return "ID가 존재합니다.";
+            response.put("success", false);
+            response.put("message", "이미 존재하는 아이디입니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
-
 
         // 비밀번호 = 비밀번호 체크 여부 확인
         if (!joinRequest.getPassword().equals(joinRequest.getPasswordCheck())) {
-            return "비밀번호가 일치하지 않습니다.";
+            response.put("success", false);
+            response.put("message", "비밀번호를 다시 확인하세요.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
 
         // 에러가 존재하지 않을 시 joinRequest 통해서 회원가입 완료
         memberService.join(joinRequest);
 
-        // 회원가입 시 홈 화면으로 이동
-        return "redirect:/jwt-login";
+        // 회원가입 시 성공 메시지
+        response.put("success", true);
+        response.put("message", "회원가입 성공!");
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/login")
