@@ -1,4 +1,7 @@
 .movie-recommendation {
     color: #FF0558;
     font-size: 30px;
+    text-decoration: none; /* 텍스트에 밑줄 제거 */
+    display: inline-block; /* 텍스트를 가로로 정렬 */
+    margin-right: 10px; /* 다른 요소와의 간격 조정 */
 }
