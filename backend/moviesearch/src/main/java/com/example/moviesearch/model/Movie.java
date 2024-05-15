@@ -11,12 +11,14 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    private String description; // 설명 필드 추가
 
     public Movie() {
     }
 
-    public Movie(String title) {
+    public Movie(String title, String description) {
         this.title = title;
+        this.description = description;
     }
 
     public Long getId() {
@@ -35,4 +37,11 @@ public class Movie {
         this.title = title;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

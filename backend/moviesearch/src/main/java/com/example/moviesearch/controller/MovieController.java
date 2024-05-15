@@ -24,7 +24,7 @@ public class MovieController {
     public ResponseEntity<String> searchMovies(@RequestParam String title) {
         List<Movie> movies = movieService.searchMovies(title);
         String response = movies.stream()
-                .map(movie -> "id: " + movie.getId() + ", title: " + movie.getTitle())
+                .map(movie -> "id: " + movie.getId() + ", title: " + movie.getTitle() + ", description: " + movie.getDescription())
                 .collect(Collectors.joining("\n"));
         return ResponseEntity.ok()
                 .header("Content-Type", "text/plain; charset=utf-8")

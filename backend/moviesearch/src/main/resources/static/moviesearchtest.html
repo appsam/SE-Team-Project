@@ -65,8 +65,8 @@
                         if (data.length === 0) {
                             searchResults.append("<div>No movies found</div>");
                         } else {
-                            data.forEach(function(movie) {
-                                searchResults.append("<div class='search-result'>" + movie.title + " (" + movie.description + ")</div>");
+                            data.split("\n").forEach(function(movie) {
+                                searchResults.append("<div class='search-result'>" + movie + "</div>");
                             });
                         }
                     },
