@@ -31,18 +31,6 @@ public class JwtLoginController {
     private final MemberService memberService;
     private final JwtUtil jwtUtil;
 
-
-    @GetMapping("/join")
-    public String joinPage(Model model) {
-
-        model.addAttribute("loginType", "jwt-login");
-        model.addAttribute("pageName", "스프링 시큐리티 JWT 로그인");
-
-        // 회원가입을 위해서 model 통해서 joinRequest 전달
-        model.addAttribute("joinRequest", new JoinRequest());
-        return "join";
-    }
-
     @PostMapping("/join")
     public ResponseEntity<Map<String,Object>> join(@Valid @RequestBody JoinRequest joinRequest,
                                             BindingResult bindingResult) {
@@ -72,29 +60,26 @@ public class JwtLoginController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/login")
-    public String loginPage(Model model) {
 
-        model.addAttribute("loginType", "jwt-login");
-        model.addAttribute("pageName", "스프링 시큐리티 JWT 로그인");
-
-        // 회원가입을 위해서 model 통해서 joinRequest 전달
-        model.addAttribute("loginRequest", new LoginRequest());
-        return "login";
-    }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest loginRequest){
+    public ResponseEntity<Map<String,Object>> login(@RequestBody LoginRequest loginRequest){
 
         Member member = memberService.login(loginRequest);
+        Map<String, Object> response = new HashMap<>();
 
 
         if(member==null){
-            return "ID 또는 비밀번호가 일치하지 않습니다!";
+            response.put("success", false);
+            response.put("message", "아이디 및 비밀번호를 다시 확인하세요.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
-
-        String token = jwtUtil.createJwt(member.getLoginId(), String.valueOf(member.getRole()), 1000 * 60 * 60L);
-        return token;
+        else{
+            String token = jwtUtil.createJwt(member.getLoginId(), String.valueOf(member.getRole()), 1000 * 60 * 60L);
+            response.put("success", true);
+            response.put("token", token);
+            response.put("message", "로그인 성공!");
+            return ResponseEntity.ok(response);}
     }
 
     @GetMapping("/info")

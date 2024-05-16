@@ -3,6 +3,7 @@
     import axios from 'axios';
 
     const SigninContent = () => {
+
       const [formData, setFormData] = useState({
         loginId: '',
         password: ''
@@ -34,12 +35,13 @@
             .then((res) => {
                                console.log(res.data);
                                if (res.data.success) {
-                                 console.log("회원가입 성공");
-                                 alert("회원가입이 성공적으로 완료되었습니다.");
-                                 window.location.href = 'http://localhost:5173/signin';
+                                 console.log("로그인 성공");
+                                 alert(res.data.message);
+                                 localStorage.setItem("Authorization", "Bearer " + res.data.token);
+                                 window.location.href = 'http://localhost:5173/';
                                } else {
-                                 console.log("회원가입 실패:", res.data.message);
-                                 alert(res.data.message || "회원가입 중 오류가 발생했습니다.");
+                                 console.log("로그인 실패:", res.data.message);
+                                 alert(res.data.message || "로그인 중 오류가 발생했습니다.");
                                }
                              })
                              .catch((error) => {
