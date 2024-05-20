@@ -1,4 +1,4 @@
-package InsertDB;
+package software.project.InsertDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,11 +18,11 @@ public class InsertRatings implements CommandLineRunner {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    
+
 
     @Override
     public void run(String... args) throws Exception {
-        String csvFile = "C:\\Users\\MS\\Desktop\\ml-latest-small\\ratings.csv"; // CSV 파일 경로
+        String csvFile = new File("src/main/java/software/project/dataset/ratings.csv").getAbsolutePath(); //"C:\\dataSet\\ratings.csv"; // CSV 파일 경로
         String tableName = "ratings"; // 테이블 이름
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {

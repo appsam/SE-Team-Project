@@ -1,4 +1,4 @@
-package InsertDB;
+package software.project.InsertDB;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 
 @Component
@@ -18,11 +19,11 @@ public class InsertLinks implements CommandLineRunner {
     @Autowired
     public InsertLinks(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;}
-    
+
 
     @Override
     public void run(String... args) throws Exception {
-        String csvFile = "C:\\Users\\MS\\Downloads\\ml-latest-small\\links.csv"; // CSV 파일 경로
+        String csvFile = new File("src/main/java/software/project/dataset/links.csv").getAbsolutePath(); //"C:\\dataSet\\links.csv"; // CSV 파일 경로
         String tableName = "links"; // 테이블 이름
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
@@ -72,7 +73,7 @@ public class InsertLinks implements CommandLineRunner {
         System.out.println("Links 테이블 생성 완료");
     }
 
-    private void insertData(String tableName, String[] data) {	
+    private void insertData(String tableName, String[] data) {
         if (data.length < 2 || data.length > 3) {
             System.err.println("잘못된 데이터 형식입니다: " + String.join(",", data));
             return;
@@ -80,8 +81,8 @@ public class InsertLinks implements CommandLineRunner {
         // 데이터 삽입 쿼리 작성
         String insertQuery;
         if (data.length == 2) {//links.csv에 tmdbId가 없는 데이터들이 있어 그것들도 삽입될수있게함.
-            insertQuery = "INSERT INTO " + tableName + " (movieId, imdbId) VALUES (?, ?)";
-            jdbcTemplate.update(insertQuery, Long.parseLong(data[0]), data[1]);
+            insertQuery = "INSERT INTO " + tableName + " (movieId,imdbId) VALUES (?, ?)";
+            jdbcTemplate.update(insertQuery, data[1],Long.parseLong(data[0]));
         } else {
             insertQuery = "INSERT INTO " + tableName + " (movieId, imdbId, tmdbId) VALUES (?, ?, ?)";
             jdbcTemplate.update(insertQuery, Long.parseLong(data[0]), data[1], Long.parseLong(data[2]));
