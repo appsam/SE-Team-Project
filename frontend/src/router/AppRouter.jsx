@@ -3,7 +3,8 @@ import AppLayout from './AppLayout';
 import MainPage from '../pages/MainPage';
 import SignupPage1 from '../pages/SignupPage1';
 import SigninPage1 from '../pages/SigninPage1';
-
+import MoviesPage from '../pages/MoviesPage';
+import ChatBotPage from '../pages/ChatBotPage';
 const AppRouter = () => {
   const router = createBrowserRouter([
     {
@@ -21,6 +22,14 @@ const AppRouter = () => {
         {
           path: '/signin',
           element: <SigninPage1 />,
+        },
+        {
+          path: '/movies',
+          element: <MoviesPage />,
+        },
+        {
+          path: '/chatbot',
+          element: <ChatBotPage />,
         },
       ],
     },
