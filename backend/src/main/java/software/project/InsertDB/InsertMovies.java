@@ -1,9 +1,8 @@
 package software.project.InsertDB;
 
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +17,7 @@ public class InsertMovies implements CommandLineRunner {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
+    EntityManager em;
 
 
     @Override
@@ -48,7 +47,18 @@ public class InsertMovies implements CommandLineRunner {
             e.printStackTrace();
         }
     }
+
     private boolean isTableExists(String tableName) {
+        // 테이블이 존재하는지 확인하는 쿼리
+        String query = "SELECT 1 FROM " + tableName + " LIMIT 1";
+        try {
+            jdbcTemplate.queryForObject(query, Integer.class);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    /*private boolean isTableExists(String tableName) {
         try {
             ResultSet resultSet = jdbcTemplate.getDataSource().getConnection().getMetaData().getTables(null, null, tableName, null);
             return resultSet.next();
@@ -56,7 +66,7 @@ public class InsertMovies implements CommandLineRunner {
             e.printStackTrace();
             return false;
         }
-    }
+    }*/
     private void createTable(String tableName) {
         String createTableQuery = "CREATE TABLE IF NOT EXISTS " + tableName + " (" +
                 "movieId BIGINT," +
@@ -73,4 +83,6 @@ public class InsertMovies implements CommandLineRunner {
 
         jdbcTemplate.update(insertQuery, Long.parseLong(data[0]), data[1], data[2]);
     }
+
+
 }

@@ -18,9 +18,21 @@
       };
     
       const handleSignupClick = () => {
-        window.location.href = 'http://localhost:5174/signup';
+        window.location.href = 'http://localhost:5173/signup';
       };
 
+      const pullData = (userId) => {
+        axios
+          .get("http://localhost:8080/api/recommend", {
+                params: { userId: userId },
+              })
+          .then((res) => { // 수정된 부분
+            console.log(res.data);
+          })
+          .catch((error) => {
+            console.error("데이터 가져오기 에러:", error);
+          });
+      };
 
 
       const onClickLogin = () => {
@@ -49,6 +61,21 @@
                                alert("회원가입 중 에러가 발생했습니다.");
                              });
                          };
+
+      const getPoster = () => {
+          var xhr = new XMLHttpRequest();
+          var url = 'http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2';/*URL*/
+          var queryParams = '?' + encodeURIComponent('ServiceKey=G3I1782G6761W2A7UV99'); /*Service Key*/
+          queryParams += '&' + encodeURIComponent('title') + '=' + encodeURIComponent('Toy Story');/*상영년도*/
+          queryParams += '&' + encodeURIComponent('genre') + '=' + encodeURIComponent('Fantasy');/*상영월*/
+          xhr.open('GET', url + queryParams);
+          xhr.onreadystatechange = function () {
+           if (this.readyState == 4) {
+            alert('Status: '+this.status+'Headers: '+JSON.stringify(this.getAllResponseHeaders())+'Body: '+this.responseText);
+            }
+          };
+            xhr.send('');
+        }
     
       return (
         <div>
@@ -87,6 +114,9 @@
               </div>
               <div className="btn">
                 <button onClick={onClickLogin}>로그인</button>
+              </div>
+              <div className="btn">
+                <button onClick={getPoster}>야옹</button>
               </div>
               <div className="already-member">
                 아직 회원이 아니신가요? <button className="signup-button" onClick={handleSignupClick}>회원가입</button>

@@ -48,11 +48,12 @@ public class InsertRatings implements CommandLineRunner {
         }
     }
     private boolean isTableExists(String tableName) {
+        // 테이블이 존재하는지 확인하는 쿼리
+        String query = "SELECT 1 FROM " + tableName + " LIMIT 1";
         try {
-            ResultSet resultSet = jdbcTemplate.getDataSource().getConnection().getMetaData().getTables(null, null, tableName, null);
-            return resultSet.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
+            jdbcTemplate.queryForObject(query, Integer.class);
+            return true;
+        } catch (Exception e) {
             return false;
         }
     }
