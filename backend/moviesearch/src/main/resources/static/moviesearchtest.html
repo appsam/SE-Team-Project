@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie Search Autocomplete</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        #suggestions, .search-results {
+            margin-top: 10px;
+        }
+        .suggestion-item, .search-result {
+            margin: 5px;
+            padding: 3px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<h2>Movie Search</h2>
+<input type="text" id="searchBox" placeholder="Type to search for autocomplete...">
+<div id="suggestions"></div>
+
+<h3>Dynamic Query Search</h3>
+<input type="text" id="queryBox" placeholder="Type to search and click Search...">
+<button id="searchBtn">Search</button>
+<div id="searchResults" class="search-results"></div>
+
+<script>
+    $(document).ready(function() {
+        // 자동완성 기능
+        $("#searchBox").on("input", function() {
+            var keyword = $(this).val();
+            if (keyword.length >= 2) {
+                $.ajax({
+                    url: "http://localhost:8080/movies/autocomplete?keyword=" + encodeURIComponent(keyword),
+                    method: "GET",
+                    success: function(data) {
+                        var suggestions = $("#suggestions");
+                        suggestions.empty();
+                        data.forEach(function(title) {
+                            suggestions.append("<div class='suggestion-item'>" + title + "</div>");
+                        });
+                    },
+                    error: function() {
+                        $("#suggestions").empty();
+                        $("#suggestions").append("<div class='suggestion-item'>Error loading data</div>");
+                    }
+                });
+            } else {
+                $("#suggestions").empty();
+            }
+        });
+
+        // 동적 쿼리 검색 기능
+        $("#searchBtn").click(function() {
+            var searchQuery = $("#queryBox").val();
+            if (searchQuery.length >= 1) {
+                $.ajax({
+                    url: "http://localhost:8080/movies/search?title=" + encodeURIComponent(searchQuery),
+                    method: "GET",
+                    success: function(data) {
+                        var searchResults = $("#searchResults");
+                        searchResults.empty();
+                        if (data.length === 0) {
+                            searchResults.append("<div>No movies found</div>");
+                        } else {
+                            data.split("\n").forEach(function(movie) {
+                                searchResults.append("<div class='search-result'>" + movie + "</div>");
+                            });
+                        }
+                    },
+                    error: function() {
+                        $("#searchResults").empty();
+                        $("#searchResults").append("<div>Error searching movies</div>");
+                    }
+                });
+            } else {
+                $("#searchResults").empty();
+                $("#searchResults").append("<div>Please enter a search term</div>");
+            }
+        });
+    });
+</script>
+</body>
+</html>
