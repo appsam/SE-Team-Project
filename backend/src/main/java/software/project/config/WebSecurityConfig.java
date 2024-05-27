@@ -52,7 +52,8 @@ public class WebSecurityConfig {
         // 경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/jwt-login", "/jwt-login/", "/jwt-login/login", "/jwt-login/join").permitAll()
+                        .requestMatchers("/jwt-login", "/jwt-login/", "/jwt-login/login", "/jwt-login/join","/api/movies"
+                        ,"/api/recommend","/api/autocomplete","/api/**").permitAll()
                         .requestMatchers("/jwt-login/admin").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 );

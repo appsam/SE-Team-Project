@@ -1,0 +1,161 @@
+.search {
+    position: relative;
+    width: 700px;
+    margin: 60px auto 0;
+    padding: 20px;
+    text-align: center;
+}
+
+input {
+    width: calc(100% - 50px);
+    border: 1px solid #bbb;
+    height: 35px;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-left: 20px;
+    text-indent: 15px;
+    box-sizing: border-box;
+}
+
+img {
+    position: absolute;
+    width: 17px;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 12px;
+    margin: 0;
+}
+
+.review-container {
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+    font-family: "Pretendard", "Apple SD Gothic Neo", "Nanum Gothic", "Malgun Gothic", sans-serif;
+    color: rgb(0, 0, 0);
+    -webkit-font-smoothing: antialiased;
+    box-sizing: border-box;
+    list-style-type: none;
+    padding: 20px;
+    margin: 0 auto 20px; /* Updated margin to center horizontally with bottom margin */
+    display: flex;
+    justify-content: center; /* Added to center the review-container */
+    position: relative;
+    flex-wrap: nowrap;
+    gap: 12px;
+    width: 900px;
+}
+
+.review-box {
+    width: 100%;
+    height: 200px;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1 0 20%;
+}
+
+.review-slide {
+    display: flex;
+    justify-content: center; /* Center the review slides horizontally */
+    transition: transform 0.5s ease-in-out;
+    width: calc(100% * 4);
+    gap: 12px;
+}
+
+.review-content {
+    flex: 1 0 25%;
+}
+
+.review-container {
+    overflow: visible;
+}
+
+.left-arrow {
+    position: absolute;
+    left: -50px;
+    top: calc(50% - 12px);
+    transform: translateY(-50%);
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.right-arrow {
+    position: absolute;
+    right: -30px;
+    top: calc(50% - 12px);
+    transform: translateY(-50%);
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.moviecontainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 60px; /* 포스터와 리뷰 섹션 사이의 간격 조정 */
+}
+
+.recommend {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap; /* 포스터가 한 줄에 넘치면 다음 줄로 이동하도록 설정 */
+}
+.ranking {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap; /* 포스터가 한 줄에 넘치면 다음 줄로 이동하도록 설정 */
+}
+.poster {
+    margin: 10px;
+    position: relative;
+    flex: 1 0 20%; /* 한 줄에 4개의 포스터가 나오도록 너비 조정 */
+}
+
+.poster img {
+    width: 200px;
+    height: auto;
+    position: relative; /* 이미지에도 상대적인 위치 설정 */
+    z-index: 1; /* 기본적으로 이미지는 앞에 나타나도록 설정 */
+}
+
+.more-button {
+    text-align: center;
+    margin-top: 20px; /* 포스터 섹션과 더보기 버튼 사이의 간격 조정 */
+}
+
+.more-button a {
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+}
+
+.search ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.search ul li {
+  padding: 8px 12px;
+  background-color: white;
+  border-bottom: 1px solid #ddd;
+  color: black;
+  position: relative;
+  z-index: 1000;
+}
+
+.search ul li:last-child {
+  border-bottom: none;
+}
+
+.search ul li:hover {
+  background-color: #e9e9e9;
+  cursor: pointer;
+}

@@ -1,0 +1,20 @@
+.movie-recommendation {
+    color: #FF0558;
+    font-size: 30px;
+    text-decoration: none;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+nav {
+    z-index: 50;
+}
+
+
+nav .bg-white {
+    background-color: #fff;
+    border-bottom: 1px solid #e5e7eb;
+}
+span {
+    color:red;
+}
