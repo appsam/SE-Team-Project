@@ -33,7 +33,7 @@ public class SearchController {
                 .body(response);
     }
     // 자동완성
-    @GetMapping("/autocomplete")
+    /*@GetMapping("/autocomplete")
     public ResponseEntity<List<String>> autocompleteMovies(@RequestParam("keyword") String keyword) {
         List<String> titles = movieService.autocompleteMovies(keyword)
                 .stream()
@@ -41,5 +41,33 @@ public class SearchController {
                 .collect(Collectors.toList());
         System.out.println(titles);
         return ResponseEntity.ok(titles);
+    }*/
+
+    @GetMapping("/autocomplete")
+    public ResponseEntity<List<MovieDTO>> autocompleteMovies(@RequestParam("keyword") String keyword) {
+        List<MovieDTO> movieDTOs = movieService.autocompleteMovies(keyword)
+                .stream()
+                .map(movie -> new MovieDTO(movie.getMovieId(), movie.getTitle()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(movieDTOs);
+    }
+
+    // MovieDTO 클래스 정의
+    public static class MovieDTO {
+        private Long movieId;
+        private String title;
+
+        public MovieDTO(Long movieId, String title) {
+            this.movieId = movieId;
+            this.title = title;
+        }
+
+        public Long getMovieId() {
+            return movieId;
+        }
+
+        public String getTitle() {
+            return title;
+        }
     }
 }

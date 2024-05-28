@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Modal from 'react-modal';
+import StarRating from './StarRating';
 
 import './Moviescontent.css';
 
@@ -160,9 +161,11 @@ const Moviescontent = () => {
                 }}
         >
           <h2>{movieDetails.title}</h2>
-          {movieDetails.poster && <img src={movieDetails.poster} alt={`${movieDetails.title} poster`} style={{ width: '200px', height: '200px' }} />}
+          {movieDetails.poster && <img src={movieDetails.poster} alt={`${movieDetails.title} poster`} style={{ width: '300px', height: '400px' }} />}
           <p>Genres: {movieDetails.genres}</p>
-          <p>Average Rating: {movieDetails.averageRating}</p>
+          <div className="rating">
+                <StarRating rating={movieDetails.averageRating} />
+          </div>
           <p>Tags: {movieDetails.tags.join(', ')}</p>
           <button onClick={handleCloseModal}></button>
         </Modal>

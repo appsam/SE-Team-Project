@@ -103,9 +103,6 @@
                   />
                 </div>
               </div>
-              <div className="agree-check">
-                <input type="checkbox" /> 이용약관 개인정보 수집 및 이용, 마케팅 활용 선택에 모두 동의합니다.
-              </div>
               <div className="btn">
                 <button onClick={onClickJoin}>가입하기</button>
               </div>

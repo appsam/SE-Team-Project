@@ -6,7 +6,7 @@ const Footer = () => {
 
         <ul className="text-xs leading-loose">
           <li>
-            Developed By 권민우, 박명수, 홍성조
+            Developed By 권민우, 박명수, 신민수, 허세현, 홍성조
           </li>
           <li className="font-semibold">
             Copyright © 2024 경기대학교 소프트웨어 공학 프젝.

@@ -4,8 +4,10 @@ import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import software.project.InsertDB.PullMovie;
+import software.project.domain.Member;
 import software.project.domain.Movies;
 import software.project.domain.Ratings;
 import software.project.domain.Tags;
@@ -15,6 +17,7 @@ import software.project.repository.TagRepository;
 import software.project.service.GetMoviePoster;
 import software.project.service.MovieService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -46,6 +49,22 @@ public class MovieController {
     public List<Movies> allMovies(){
         return pullMovie.findData();
     }
+
+    @GetMapping("/rating4")
+    public List<String> top4Movies() throws JSONException {
+        List<Long> top4MovieId = ratingRepository.findTop4MovieId(PageRequest.of(0,4));
+        List<String> top4PosterUrl = new ArrayList<>();
+
+        for (Long movieId : top4MovieId) {
+            Movies movie = movieRepository.findByMovieId(movieId);
+            if(movie != null){
+                String posterUrl = moviePoster.getPoster(movie.getTitle());
+                top4PosterUrl.add(posterUrl);
+            }
+        }
+        return top4PosterUrl;
+    }
+
 
     @GetMapping("/{id}")
     public Map<String, Object> getMovieDetails(@PathVariable("id") Long id) {
