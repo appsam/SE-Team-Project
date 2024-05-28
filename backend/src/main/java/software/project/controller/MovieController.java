@@ -51,6 +51,25 @@ public class MovieController {
     }
 
     @GetMapping("/rating4")
+    public List<Map<String, Object>> top4Movies() throws JSONException {
+        List<Long> top4MovieId = ratingRepository.findTop4MovieId(PageRequest.of(0, 4));
+        List<Map<String, Object>> top4PosterUrlWithIds = new ArrayList<>();
+
+        for (Long movieId : top4MovieId) {
+            Movies movie = movieRepository.findByMovieId(movieId);
+            if (movie != null) {
+                String posterUrl = moviePoster.getPoster(movie.getTitle());
+                Map<String, Object> posterWithId = Map.of(
+                        "poster", posterUrl,
+                        "movieId", movieId
+                );
+                top4PosterUrlWithIds.add(posterWithId);
+            }
+        }
+        return top4PosterUrlWithIds;
+    }
+
+    /*@GetMapping("/rating4")
     public List<String> top4Movies() throws JSONException {
         List<Long> top4MovieId = ratingRepository.findTop4MovieId(PageRequest.of(0,4));
         List<String> top4PosterUrl = new ArrayList<>();
@@ -59,11 +78,26 @@ public class MovieController {
             Movies movie = movieRepository.findByMovieId(movieId);
             if(movie != null){
                 String posterUrl = moviePoster.getPoster(movie.getTitle());
+
                 top4PosterUrl.add(posterUrl);
             }
         }
         return top4PosterUrl;
-    }
+    }*/
+
+    /*@GetMapping("/ratingTop4")
+    public List<Movies> ratingTop4() throws JSONException{
+        List<Long> top4MovieId = ratingRepository.findTop4MovieId(PageRequest.of(0,4));
+        List<Movies> ratingTop4Movies = new ArrayList<>();
+        for(Long movieId : top4MovieId) {
+            Movies movies = movieRepository.findByMovieId(movieId);
+            if(movies != null){
+                ratingTop4Movies.add(movies);
+
+            }
+        }
+        return ratingTop4Movies;
+    }*/
 
 
     @GetMapping("/{id}")

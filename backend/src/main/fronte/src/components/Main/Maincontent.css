@@ -98,6 +98,7 @@ img {
     flex-wrap: wrap;
     justify-content: center;
     margin-top: 60px; /* 포스터와 리뷰 섹션 사이의 간격 조정 */
+    z-index : 1000;
 }
 .sectionContainer {
     display: flex;
@@ -165,3 +166,4 @@ img {
   background-color: #e9e9e9;
   cursor: pointer;
 }
+
