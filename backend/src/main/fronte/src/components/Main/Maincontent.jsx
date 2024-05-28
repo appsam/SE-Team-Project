@@ -10,18 +10,23 @@ const Maincontent = () => {
   const [showModal, setShowModal] = useState(false);
   const [movieDetails, setMovieDetails] = useState(null);
   const [top4Posters, setTop4Posters] = useState([]);
+  const [top4Movies, setTop4Movies] = useState([]);
 
   useEffect(() => {
-      // 별점 TOP4 포스터 가져오기
+      // 별점 TOP4 포스터와 영화 ID 가져오기
       axios
-          .get('http://localhost:8080/api/rating4')
-          .then((res) => {
-              setTop4Posters(res.data);
-          })
-          .catch((error) => {
-              console.error('별점 TOP4 포스터 가져오기 에러:', error);
-          });
-  }, []);
+        .get('http://localhost:8080/api/rating4')
+        .then((res) => {
+          const postersWithIds = res.data.map((item) => ({
+            poster: item.poster,
+            movieId: item.movieId,
+          }));
+          setTop4Posters(postersWithIds);
+        })
+        .catch((error) => {
+          console.error('별점 TOP4 포스터 가져오기 에러:', error);
+        });
+    }, []);
 
   const handleMovieClick = (movieId) => {
       console.log('Movie clicked:', movieId);
@@ -35,6 +40,11 @@ const Maincontent = () => {
           console.error('영화 상세 정보 가져오기 에러:', error);
         });
     };
+
+   const handlePosterClick = (movieId) => {
+       console.log('Poster clicked:', movieId);
+       handleMovieClick(movieId);
+     };
 
     const handleCloseModal = () => {
       setShowModal(false);
@@ -96,12 +106,15 @@ const Maincontent = () => {
         <div className="sectionContainer">
             <h2>별점 TOP4</h2>
             <div className="recommend">
-              {/* 이미지 경로 수정 */}
-              {top4Posters.map((poster, index) => (
-                  <div key={index} className="poster">
-                    <img src={poster} alt={`포스터 ${index + 1}`} />
-                  </div>
-               ))}
+              {top4Posters.map((item, index) => (
+                  <div
+                     key={index}
+                     className="poster"
+                     onClick={() => handlePosterClick(item.movieId)}
+                   >
+                     <img src={item.poster} alt={`포스터 ${index + 1}`} />
+                   </div>
+              ))}
             </div>
         </div>
         <div className="sectionContainer">
@@ -126,7 +139,8 @@ const Maincontent = () => {
                       contentLabel="Movie Detail Modal"
                       style={{
                         overlay: {
-                          backgroundColor: 'rgba(0, 0, 0, 0.5)'
+                          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                          zIndex: '3000',
                         },
                         content: {
                           backgroundColor: '#fffff',
@@ -134,7 +148,8 @@ const Maincontent = () => {
                           height: '70%',
                           margin: 'auto',
                           overflow: 'hidden',
-                          zIndex: '1000',
+                          display: 'relativey',
+                          zIndex: '4000',
                         },
                       }}
               >
