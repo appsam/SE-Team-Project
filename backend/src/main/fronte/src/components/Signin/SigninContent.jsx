@@ -115,9 +115,6 @@
               <div className="btn">
                 <button onClick={onClickLogin}>로그인</button>
               </div>
-              <div className="btn">
-                <button onClick={getPoster}>야옹</button>
-              </div>
               <div className="already-member">
                 아직 회원이 아니신가요? <button className="signup-button" onClick={handleSignupClick}>회원가입</button>
               </div>

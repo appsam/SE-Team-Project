@@ -3,6 +3,7 @@ package software.project.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import software.project.domain.Movies;
 import software.project.domain.Tags;
@@ -17,4 +18,10 @@ public interface MovieRepository extends JpaRepository<Movies, Long>, JpaSpecifi
     /*@Query("SELECT m FROM Movies m WHERE m.title LIKE %:keyword%")
     List<Movies> findByTitleContaining(String keyword);*/
     Movies findByMovieId(Long id);
+
+    Movies findByTitle(String title);
+    @Query("SELECT m FROM Movies m WHERE m.title = :title")
+    Long findIdByTitle(@Param("title") String title);
+
+
 }

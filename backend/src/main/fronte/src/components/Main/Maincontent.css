@@ -99,10 +99,16 @@ img {
     justify-content: center;
     margin-top: 60px; /* 포스터와 리뷰 섹션 사이의 간격 조정 */
 }
+.sectionContainer {
+    display: flex;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
 
 .recommend {
     display: flex;
     justify-content: center;
+    margin-top: 20px;
     margin-bottom: 20px;
     flex-wrap: wrap; /* 포스터가 한 줄에 넘치면 다음 줄로 이동하도록 설정 */
 }
