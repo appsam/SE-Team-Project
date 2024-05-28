@@ -1,4 +1,5 @@
 package software.project.service;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -14,9 +15,11 @@ public class GeminiService {
 
     // API URL과 API 키 직접 명시
     private final String apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyAaUnKHvhczOnYcuBw5jyAytzaZvUxi1_E";
-    
+
+    @Autowired
     private final RestTemplate restTemplate;
 
+    @Autowired
     public GeminiService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
