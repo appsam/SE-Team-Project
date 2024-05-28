@@ -160,7 +160,7 @@ const Moviescontent = () => {
                 }}
         >
           <h2>{movieDetails.title}</h2>
-          {movieDetails.poster && <img src={movieDetails.poster} alt={`${movieDetails.title} poster`} />}
+          {movieDetails.poster && <img src={movieDetails.poster} alt={`${movieDetails.title} poster`} style={{ width: '200px', height: '200px' }} />}
           <p>Genres: {movieDetails.genres}</p>
           <p>Average Rating: {movieDetails.averageRating}</p>
           <p>Tags: {movieDetails.tags.join(', ')}</p>
