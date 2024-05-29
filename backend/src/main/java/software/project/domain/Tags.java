@@ -25,7 +25,7 @@ public class Tags {
     @Column(name = "timeStamp")
     private Long timeStamp;
 
-    @ManyToOne
+    /*@ManyToOne
     @JoinColumn(name = "movieId", insertable = false, updatable = false)
-    private Movies movies;
+    private Movies movies;*/
 }
