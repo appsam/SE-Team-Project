@@ -20,14 +20,14 @@ public class Movies {
     private String title;
     private String genres;
 
-    @OneToMany(mappedBy = "movies", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    /*@OneToMany(mappedBy = "movies", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Ratings> ratings;
 
     @OneToMany(mappedBy = "movies", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Tags> tags;
 
     @OneToOne(mappedBy = "movies", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Links links;
+    private Links links;*/
 
 
 

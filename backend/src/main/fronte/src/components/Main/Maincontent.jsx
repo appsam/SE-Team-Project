@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Maincontent.css';
 import axios from 'axios';
 import Modal from 'react-modal';
+import StarRating from './StarRating';
 
 const Maincontent = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -10,7 +11,7 @@ const Maincontent = () => {
   const [showModal, setShowModal] = useState(false);
   const [movieDetails, setMovieDetails] = useState(null);
   const [top4Posters, setTop4Posters] = useState([]);
-  const [top4Movies, setTop4Movies] = useState([]);
+  const [recommend, setRecommend] = useState([]);
 
   useEffect(() => {
       // 별점 TOP4 포스터와 영화 ID 가져오기
@@ -27,6 +28,22 @@ const Maincontent = () => {
           console.error('별점 TOP4 포스터 가져오기 에러:', error);
         });
     }, []);
+
+    useEffect(() => {
+          // 추천 TOP4 포스터와 영화 ID 가져오기
+          axios
+            .get('http://localhost:8080/api/recommend/top')
+            .then((res) => {
+              const recommendPostersWithIds = res.data.map((item) => ({
+                poster: item.poster,
+                movieId: item.movieId,
+              }));
+              setRecommend(recommendPostersWithIds);
+            })
+            .catch((error) => {
+              console.error('별점 TOP4 포스터 가져오기 에러:', error);
+            });
+        }, []);
 
   const handleMovieClick = (movieId) => {
       console.log('Movie clicked:', movieId);
@@ -104,26 +121,31 @@ const Maincontent = () => {
       <MovieAutocomplete />
       <div className="moviecontainer">
         <div className="sectionContainer">
-            <h2>별점 TOP4</h2>
+            <h2>추천 TOP4</h2>
             <div className="recommend">
-              {top4Posters.map((item, index) => (
-                  <div
-                     key={index}
-                     className="poster"
-                     onClick={() => handlePosterClick(item.movieId)}
-                   >
-                     <img src={item.poster} alt={`포스터 ${index + 1}`} />
-                   </div>
-              ))}
+                {recommend.map((item, index) => (
+                       <div
+                         key={index}
+                         className="poster"
+                         onClick={() => handlePosterClick(item.movieId)}
+                           >
+                       <img src={item.poster} alt={`포스터 ${index + 1}`} />
+                       </div>
+                ))}
             </div>
         </div>
         <div className="sectionContainer">
-          <h2>추천 TOP4</h2>
+          <h2>별점 TOP4</h2>
           <div className="ranking">
-              <div className="poster"><img src="/images/남자가사랑할때.jpg" alt="포스터 5" /></div>
-              <div className="poster"><img src="/images/주만지.jpg" alt="포스터 6" /></div>
-              <div className="poster"><img src="/images/토이스토리.jpg" alt="포스터 7" /></div>
-              <div className="poster"><img src="/images/히트.jpg" alt="포스터 8" /></div>
+          {top4Posters.map((item, index) => (
+                   <div
+                      key={index}
+                      className="poster"
+                      onClick={() => handlePosterClick(item.movieId)}
+                       >
+                   <img src={item.poster} alt={`포스터 ${index + 1}`} />
+                   </div>
+          ))}
           </div>
         </div>
       </div>
@@ -156,7 +178,9 @@ const Maincontent = () => {
                 <h2>{movieDetails.title}</h2>
                 {movieDetails.poster && <img src={movieDetails.poster} alt={`${movieDetails.title} poster`} style={{ width: '300px', height: '400px' }} />}
                 <p>Genres: {movieDetails.genres}</p>
-                <p>Average Rating: {movieDetails.averageRating}</p>
+                <div className="rating">
+                       <StarRating rating={movieDetails.averageRating} />
+                </div>
                 <p>Tags: {movieDetails.tags.join(', ')}</p>
                 <button onClick={handleCloseModal}></button>
               </Modal>

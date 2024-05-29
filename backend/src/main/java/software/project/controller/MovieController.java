@@ -16,6 +16,7 @@ import software.project.repository.RatingRepository;
 import software.project.repository.TagRepository;
 import software.project.service.GetMoviePoster;
 import software.project.service.MovieService;
+import software.project.service.RecommendationService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +46,11 @@ public class MovieController {
         this.moviePoster = moviePoster;
     }
 
+    @Autowired
+    private RecommendationService recommendationService;
+
     @GetMapping("/movies")
-    public List<Movies> allMovies(){
+    public List<Movies> allMovies() {
         return pullMovie.findData();
     }
 
@@ -66,39 +70,38 @@ public class MovieController {
                 top4PosterUrlWithIds.add(posterWithId);
             }
         }
+        logger.info("Top 4 Movie IDs: {}", top4PosterUrlWithIds);
         return top4PosterUrlWithIds;
     }
 
-    /*@GetMapping("/rating4")
-    public List<String> top4Movies() throws JSONException {
-        List<Long> top4MovieId = ratingRepository.findTop4MovieId(PageRequest.of(0,4));
-        List<String> top4PosterUrl = new ArrayList<>();
+    @GetMapping("/recommend/top")
+    public List<Map<String, Object>> recommendTopMovies() {
+        List<Movies> recommendedMovies = recommendationService.recommendTopMovies();
+        List<Map<String, Object>> topPosterUrlWithIds = new ArrayList<>();
 
-        for (Long movieId : top4MovieId) {
-            Movies movie = movieRepository.findByMovieId(movieId);
-            if(movie != null){
-                String posterUrl = moviePoster.getPoster(movie.getTitle());
+        for (Movies movie : recommendedMovies) {
 
-                top4PosterUrl.add(posterUrl);
+            if (movie != null) {
+                String posterUrl = "";
+                try {
+                    posterUrl = moviePoster.getPoster(movie.getTitle());
+                } catch (JSONException e) {
+                    logger.error("Error fetching poster for movie: {}", movie.getTitle(), e);
+                }
+                logger.info(posterUrl);
+                Map<String, Object> posterWithId = null;
+                if (movie != null) {
+                    posterWithId = Map.of(
+                            "poster", posterUrl,
+                            "movieId", movie.getMovieId()
+                    );
+                }
+                topPosterUrlWithIds.add(posterWithId);
+
             }
         }
-        return top4PosterUrl;
-    }*/
-
-    /*@GetMapping("/ratingTop4")
-    public List<Movies> ratingTop4() throws JSONException{
-        List<Long> top4MovieId = ratingRepository.findTop4MovieId(PageRequest.of(0,4));
-        List<Movies> ratingTop4Movies = new ArrayList<>();
-        for(Long movieId : top4MovieId) {
-            Movies movies = movieRepository.findByMovieId(movieId);
-            if(movies != null){
-                ratingTop4Movies.add(movies);
-
-            }
-        }
-        return ratingTop4Movies;
-    }*/
-
+        return topPosterUrlWithIds;
+    }
 
     @GetMapping("/{id}")
     public Map<String, Object> getMovieDetails(@PathVariable("id") Long id) {
@@ -108,15 +111,13 @@ public class MovieController {
         List<String> tags = tagRepository.findByMovieId(id)
                 .stream().map(Tags::getTag).collect(Collectors.toList());
 
-
-        String posterUrl=null;
+        String posterUrl = null;
 
         try {
             posterUrl = moviePoster.getPoster(movie.getTitle());
         } catch (JSONException e) {
             logger.error("Error fetching poster for movie: {}", movie.getTitle(), e);
         }
-
 
         // null 값을 허용하지 않도록 체크하고 설정
         Map<String, Object> movieDetails = Map.of(
@@ -129,7 +130,5 @@ public class MovieController {
 
         logger.info("Movie Details: {}", movieDetails);
         return movieDetails;
-
     }
-
 }
