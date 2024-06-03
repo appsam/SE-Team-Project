@@ -1,33 +1,30 @@
 package software.project.InsertDB;
 
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.IOException;
 
 @Component
 public class InsertMovies implements CommandLineRunner {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    EntityManager em;
-
 
     @Override
     public void run(String... args) throws Exception {
-        String csvFile = new File("src/main/java/software/project/dataset/movies.csv").getAbsolutePath(); //"C:\\dataSet\\movies.csv"; // CSV 파일 경로
+        String csvFile = new File("src/main/java/software/project/dataset/movies.csv").getAbsolutePath(); // CSV 파일 경로
         String tableName = "movies"; // 테이블 이름
 
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-            String headerLine = br.readLine();
-            String[] columns = headerLine.split(",");
+        try (CSVReader csvReader = new CSVReader(new FileReader(csvFile))) {
+            String[] columns = csvReader.readNext();
             if (isTableExists(tableName)) {
                 System.out.println("Movies 테이블이 이미 존재합니다.");
                 return;
@@ -36,20 +33,18 @@ public class InsertMovies implements CommandLineRunner {
             createTable(tableName);
 
             // CSV 파일의 데이터를 테이블에 삽입
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] data = line.split(",");
+            String[] data;
+            while ((data = csvReader.readNext()) != null) {
                 insertData(tableName, data);
             }
 
             System.out.println("Movies 데이터 삽입 완료");
-        } catch (Exception e) {
+        } catch (IOException | CsvValidationException e) {
             e.printStackTrace();
         }
     }
 
     private boolean isTableExists(String tableName) {
-        // 테이블이 존재하는지 확인하는 쿼리
         String query = "SELECT 1 FROM " + tableName + " LIMIT 1";
         try {
             jdbcTemplate.queryForObject(query, Integer.class);
@@ -58,20 +53,13 @@ public class InsertMovies implements CommandLineRunner {
             return false;
         }
     }
-    /*private boolean isTableExists(String tableName) {
-        try {
-            ResultSet resultSet = jdbcTemplate.getDataSource().getConnection().getMetaData().getTables(null, null, tableName, null);
-            return resultSet.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }*/
+
     private void createTable(String tableName) {
         String createTableQuery = "CREATE TABLE IF NOT EXISTS " + tableName + " (" +
                 "movieId BIGINT," +
                 "title VARCHAR(255)," +
-                "genres VARCHAR(255)" +
+                "genres VARCHAR(255)," +
+                "averageRating DOUBLE" +
                 ")";
 
         jdbcTemplate.execute(createTableQuery);
@@ -83,6 +71,4 @@ public class InsertMovies implements CommandLineRunner {
 
         jdbcTemplate.update(insertQuery, Long.parseLong(data[0]), data[1], data[2]);
     }
-
-
 }

@@ -21,7 +21,5 @@ public class Links {
     @Column(name = "tmdbId")
     private Long tmdbId;
 
-    /*@OneToOne
-    @JoinColumn(name = "movieId", insertable = false, updatable = false)
-    private Movies movies;*/
+
 }

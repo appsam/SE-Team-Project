@@ -1,5 +1,6 @@
 package software.project.repository;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -13,15 +14,24 @@ import java.util.List;
 @Repository
 public interface MovieRepository extends JpaRepository<Movies, Long>, JpaSpecificationExecutor<Movies> {
     List<Movies> findByTitleContaining(String title);
-    // JpaSpecificationExecutor<Movie>를 상속받아 동적 쿼리를 사용할 수 있게 함
 
-    /*@Query("SELECT m FROM Movies m WHERE m.title LIKE %:keyword%")
-    List<Movies> findByTitleContaining(String keyword);*/
     Movies findByMovieId(Long id);
 
     Movies findByTitle(String title);
     @Query("SELECT m FROM Movies m WHERE m.title = :title")
     Long findIdByTitle(@Param("title") String title);
+
+    @Query("SELECT m, AVG(r.rating) AS averageRating " +
+            "FROM Movies m " +
+            "JOIN Ratings r ON m.movieId = r.movieId " +
+            "GROUP BY m " +
+            "ORDER BY averageRating DESC")
+    List<Object[]> findMoviesWithAverageRating();
+
+
+
+
+
 
 
 }

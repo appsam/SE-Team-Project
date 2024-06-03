@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import software.project.config.SecurityUtil;
 import software.project.domain.Member;
+import software.project.domain.MemberRole;
 import software.project.dto.JoinRequest;
 import software.project.dto.LoginRequest;
 import software.project.repository.MemberRepository;
@@ -27,9 +28,16 @@ public class MemberService {
 
 
 
-    // 회원강비(db에 저장)
+    // 회원가입(db에 저장)
     public void join(JoinRequest joinRequest) {
-        memberRepository.save(joinRequest.toEntity());
+        Member member = new Member();
+        member.setLoginId(joinRequest.getLoginId());
+        member.setPassword(joinRequest.getPassword());
+        member.setName(joinRequest.getName());
+        member.setPreferredGenres(joinRequest.getSelectedGenres());
+        member.setRole(MemberRole.USER);
+        memberRepository.save(member);
+        /*memberRepository.save(joinRequest.toEntity());*/
     }
 
 
