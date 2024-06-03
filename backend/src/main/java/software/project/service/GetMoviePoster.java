@@ -1,6 +1,7 @@
 package software.project.service;
 
 import lombok.ToString;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,15 +45,12 @@ public class GetMoviePoster {
             conn.setRequestMethod("GET");
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
             StringBuilder sb = new StringBuilder();
-            logger.info("{}",sb);
             String line;
             while ((line = br.readLine()) != null) {
                 sb.append(line);
             }
             br.close();
-
             String response = sb.toString();
-            logger.info("{}",response);
 
 
             JSONObject jsonResponse = new JSONObject(response);

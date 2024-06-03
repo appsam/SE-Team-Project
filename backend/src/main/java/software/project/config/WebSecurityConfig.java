@@ -53,7 +53,7 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/jwt-login", "/jwt-login/", "/jwt-login/login", "/jwt-login/join","/api/movies"
-                        ,"/api/recommend","/api/autocomplete","/api/**").permitAll()
+                        ,"/api/recommend","/api/autocomplete","/api/**","/api/recommend/**").permitAll()
                         .requestMatchers("/jwt-login/admin").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 );

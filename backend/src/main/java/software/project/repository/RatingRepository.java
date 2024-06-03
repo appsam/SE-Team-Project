@@ -16,6 +16,8 @@ public interface RatingRepository extends JpaRepository<Ratings, RatingId> {
     List<Ratings> findByMovieId(Long movieId);
 
     @Query("SELECT r.movieId FROM Ratings r WHERE rating = 5.0 GROUP BY r.movieId ORDER BY COUNT(r.rating) DESC")
+    //@Query("SELECT movieId FROM Movies ORDER BY averageRating DESC")
     List<Long> findTop4MovieId(Pageable pageable);
+
 
 }

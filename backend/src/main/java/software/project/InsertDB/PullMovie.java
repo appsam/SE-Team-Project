@@ -17,8 +17,17 @@ public class PullMovie {
     public JdbcTemplate jdbcTemplate;
 
     public List<Movies> findData() {
-        String sql = "SELECT movieId,title,genres FROM movies";
+        String sql = "SELECT movieId,title,genres,averageRating FROM movies";
         return jdbcTemplate.query(sql,new MovieMapper());
+    }
+
+    public void settingData() {
+        String sql = "SELECT COUNT(*) FROM movies WHERE averageRating IS NOT NULL";
+        int count = jdbcTemplate.queryForObject(sql, Integer.class);
+        if (count == 0) {
+            String updateSql = "UPDATE movies m SET averageRating = (SELECT AVG(rating) FROM ratings WHERE movieId = m.movieId)";
+            jdbcTemplate.update(updateSql);
+        }
     }
 
     private static final class MovieMapper implements RowMapper<Movies> {
@@ -28,6 +37,7 @@ public class PullMovie {
             movies.setMovieId(rs.getLong("movieId"));
             movies.setTitle(rs.getString("title"));
             movies.setGenres(rs.getString("genres"));
+            movies.setAverageRating(rs.getDouble("averageRating"));
             return movies;
         }
     }

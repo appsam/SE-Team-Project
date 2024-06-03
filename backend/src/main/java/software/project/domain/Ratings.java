@@ -26,8 +26,5 @@ public class Ratings {
     @Column(name = "timeStamp")
     private Long timeStamp;
 
-    /*@ManyToOne
-    @JoinColumn(name = "movieId", insertable = false, updatable = false)
-    private Movies movies;*/
 }
 

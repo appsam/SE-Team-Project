@@ -5,9 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import software.project.InsertDB.PullMovie;
-import software.project.domain.Member;
 import software.project.domain.Movies;
 import software.project.domain.Ratings;
 import software.project.domain.Tags;
@@ -34,20 +34,57 @@ public class MovieController {
     private final RatingRepository ratingRepository;
     private final TagRepository tagRepository;
     private final GetMoviePoster moviePoster;
+    private final RecommendationService recommendationService;
 
     @Autowired
     public MovieController(PullMovie pullMovie, MovieService movieService, MovieRepository movieRepository,
-                           RatingRepository ratingRepository, TagRepository tagRepository, GetMoviePoster moviePoster) {
+                           RatingRepository ratingRepository, TagRepository tagRepository, GetMoviePoster moviePoster,RecommendationService recommendationService) {
         this.pullMovie = pullMovie;
         this.movieService = movieService;
         this.movieRepository = movieRepository;
         this.ratingRepository = ratingRepository;
         this.tagRepository = tagRepository;
         this.moviePoster = moviePoster;
+        this.recommendationService = recommendationService;
     }
 
-    @Autowired
-    private RecommendationService recommendationService;
+    @GetMapping("/setting")
+    public void settingData(){
+        pullMovie.settingData();
+    }
+
+
+    @GetMapping("/recommend/{memberId}")
+    public List<Map<String, Object>> getRecommendations(@PathVariable("memberId") Long memberId) throws JSONException {
+        List<Map<String, Object>> top4PosterUrlWithIds = new ArrayList<>();
+        List<Movies> recommendMovieName4 = recommendationService.recommendMovies(memberId);
+
+        for (Movies movies : recommendMovieName4) {
+            if(movies != null) {
+                String posterUrl = moviePoster.getPoster(movies.getTitle());
+                Long movieId = movies.getMovieId();
+
+                // 포스터가 없을 경우 무작위로 영화 검색
+                while(posterUrl == null) {
+                    Long randomNumber = (long)(Math.random() * 9742) + 1;
+                    Movies randomMovie = movieRepository.findByMovieId(randomNumber);
+                    if (randomMovie != null) {  // null 체크
+                        posterUrl = moviePoster.getPoster(randomMovie.getTitle());
+                        if (posterUrl != null) {  // 포스터가 있을 경우 movieId를 변경
+                            movieId = randomMovie.getMovieId();
+                        }
+                    }
+                }
+
+                Map<String, Object> posterWithId = Map.of(
+                        "poster", posterUrl,
+                        "movieId", movieId
+                );
+                top4PosterUrlWithIds.add(posterWithId);
+            }
+        }
+        return top4PosterUrlWithIds;
+    }
 
     @GetMapping("/movies")
     public List<Movies> allMovies() {
@@ -70,38 +107,10 @@ public class MovieController {
                 top4PosterUrlWithIds.add(posterWithId);
             }
         }
-        logger.info("Top 4 Movie IDs: {}", top4PosterUrlWithIds);
         return top4PosterUrlWithIds;
     }
 
-    @GetMapping("/recommend/top")
-    public List<Map<String, Object>> recommendTopMovies() {
-        List<Movies> recommendedMovies = recommendationService.recommendTopMovies();
-        List<Map<String, Object>> topPosterUrlWithIds = new ArrayList<>();
 
-        for (Movies movie : recommendedMovies) {
-
-            if (movie != null) {
-                String posterUrl = "";
-                try {
-                    posterUrl = moviePoster.getPoster(movie.getTitle());
-                } catch (JSONException e) {
-                    logger.error("Error fetching poster for movie: {}", movie.getTitle(), e);
-                }
-                logger.info(posterUrl);
-                Map<String, Object> posterWithId = null;
-                if (movie != null) {
-                    posterWithId = Map.of(
-                            "poster", posterUrl,
-                            "movieId", movie.getMovieId()
-                    );
-                }
-                topPosterUrlWithIds.add(posterWithId);
-
-            }
-        }
-        return topPosterUrlWithIds;
-    }
 
     @GetMapping("/{id}")
     public Map<String, Object> getMovieDetails(@PathVariable("id") Long id) {
@@ -128,7 +137,7 @@ public class MovieController {
                 "tags", tags != null ? tags : List.of()
         );
 
-        logger.info("Movie Details: {}", movieDetails);
         return movieDetails;
     }
+
 }

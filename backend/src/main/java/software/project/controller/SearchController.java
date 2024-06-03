@@ -8,6 +8,7 @@ import software.project.repository.MemberRepository;
 import software.project.repository.MovieRepository;
 import software.project.service.MovieService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 @RequestMapping("/api")
@@ -23,14 +24,16 @@ public class SearchController {
 
 
     @GetMapping("/search")
-    public ResponseEntity<String> searchMovies(@RequestParam String title) {
+    public ResponseEntity<List<Movies>> searchMovies(@RequestParam String title) {
         List<Movies> movies = movieService.searchMovies(title);
-        String response = movies.stream()
-                .map(movie -> "id: " + movie.getMovieId() + ", title: " + movie.getTitle() + ", description: ")
-                .collect(Collectors.joining("\n"));
-        return ResponseEntity.ok()
-                .header("Content-Type", "text/plain; charset=utf-8")
-                .body(response);
+        List<Movies> recommendedMovies = movieService.recommendRelatedMovies(title);
+
+        // 영화 및 추천 영화 목록을 한 리스트에 합침
+        //List<Movies> allMovies = new ArrayList<>();
+        //allMovies.addAll(movies);
+        //allMovies.add((Movies) recommendedMovies);
+
+        return ResponseEntity.ok(recommendedMovies);
     }
     // 자동완성
     /*@GetMapping("/autocomplete")

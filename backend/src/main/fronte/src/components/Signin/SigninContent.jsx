@@ -50,6 +50,7 @@
                                  console.log("로그인 성공");
                                  alert(res.data.message);
                                  localStorage.setItem("Authorization", "Bearer " + res.data.token);
+                                 localStorage.setItem("memberId", res.data.memberId);
                                  window.location.href = 'http://localhost:5173/';
                                } else {
                                  console.log("로그인 실패:", res.data.message);
@@ -58,7 +59,7 @@
                              })
                              .catch((error) => {
                                console.error("회원가입 에러:", error);
-                               alert("회원가입 중 에러가 발생했습니다.");
+                               alert("로그인 중 에러가 발생했습니다.");
                              });
                          };
 

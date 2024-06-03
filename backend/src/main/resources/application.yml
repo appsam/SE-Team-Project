@@ -7,7 +7,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none #create 최초 1회
+      ddl-auto: update #create 최초 1회
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
@@ -22,3 +22,7 @@ spring:
   jwt:
     header: Authorization
     secret: secretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKey
+
+omdb:
+  api:
+    key: 29d33c7c

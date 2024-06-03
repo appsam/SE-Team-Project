@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@ToString
 public class Movies {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,16 +20,11 @@ public class Movies {
     private Long movieId;
     private String title;
     private String genres;
-
-    /*@OneToMany(mappedBy = "movies", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Ratings> ratings;
-
-    @OneToMany(mappedBy = "movies", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Tags> tags;
-
-    @OneToOne(mappedBy = "movies", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Links links;*/
+    private Double averageRating;
 
 
+    public Movies(String  title){
+        this.title = title;
+    }
 
 }

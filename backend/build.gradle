@@ -11,6 +11,10 @@ java {
 	sourceCompatibility = '17'
 }
 
+/*compileJava {
+	options.compilerArgs << "-parameters"
+}*/
+
 repositories {
 	mavenCentral()
 }
@@ -35,6 +39,10 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
 	implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
+
+	implementation 'org.apache.commons:commons-compress:1.21'
+
+	implementation 'com.opencsv:opencsv:5.5.2'
 
 }
 

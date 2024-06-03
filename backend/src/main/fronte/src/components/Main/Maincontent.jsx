@@ -12,11 +12,12 @@ const Maincontent = () => {
   const [movieDetails, setMovieDetails] = useState(null);
   const [top4Posters, setTop4Posters] = useState([]);
   const [recommend, setRecommend] = useState([]);
+  const [test, setTest] = useState([]);
 
   useEffect(() => {
       // 별점 TOP4 포스터와 영화 ID 가져오기
       axios
-        .get('http://localhost:8080/api/rating4')
+        .get(`http://localhost:8080/api/rating4`)
         .then((res) => {
           const postersWithIds = res.data.map((item) => ({
             poster: item.poster,
@@ -29,10 +30,12 @@ const Maincontent = () => {
         });
     }, []);
 
+
     useEffect(() => {
+          const memberId = localStorage.getItem('memberId');
           // 추천 TOP4 포스터와 영화 ID 가져오기
           axios
-            .get('http://localhost:8080/api/recommend/top')
+            .get(`http://localhost:8080/api/recommend/${memberId}`)
             .then((res) => {
               const recommendPostersWithIds = res.data.map((item) => ({
                 poster: item.poster,
@@ -41,9 +44,34 @@ const Maincontent = () => {
               setRecommend(recommendPostersWithIds);
             })
             .catch((error) => {
-              console.error('별점 TOP4 포스터 가져오기 에러:', error);
+              console.error('추천 TOP4 포스터 가져오기 에러:', error);
             });
         }, []);
+
+  const testClick = (movie) => {
+        console.log(movie);
+        axios
+            .get(`http://localhost:8080/api/search`,{params: {title: movie.title},})
+            .then((res) => {
+                setTest(res.data);
+                console.log(res.data);
+            })
+            .catch((error) => {
+                console.log(`그냥 에러`,error)
+            });
+  };
+
+  const testGetMovie = (movieId) => {
+        console.log(movieId);
+        axios
+            .get(`http://localhost:8080/api/${movieId}`)
+                    .then((res) => {
+                      setMovieDetails(res.data);
+                    })
+                    .catch((error) => {
+                      console.error('영화 상세 정보 가져오기 에러:', error);
+                    });
+  };
 
   const handleMovieClick = (movieId) => {
       console.log('Movie clicked:', movieId);
@@ -104,6 +132,7 @@ const Maincontent = () => {
           onChange={handleChange}
         />
         <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" alt="검색" />
+        {/* <div className="more-button" onClick={() => testClick('"Birdcage')}><a>클릭</a></div> */}
         <ul>
           {suggestions.map((movie) => (
             <li key={movie.movieId} onClick={() => handleSuggestionClick(movie.movieId)}>

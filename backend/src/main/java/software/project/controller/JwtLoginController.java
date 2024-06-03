@@ -54,6 +54,7 @@ public class JwtLoginController {
         // 에러가 존재하지 않을 시 joinRequest 통해서 회원가입 완료
         memberService.join(joinRequest);
 
+
         // 회원가입 시 성공 메시지
         response.put("success", true);
         response.put("message", "회원가입 성공!");
@@ -76,9 +77,11 @@ public class JwtLoginController {
         }
         else{
             String token = jwtUtil.createJwt(member.getLoginId(), String.valueOf(member.getRole()), 1000 * 60 * 60L);
+            Long memberId = member.getId();
             response.put("success", true);
             response.put("token", token);
             response.put("message", "로그인 성공!");
+            response.put("memberId",memberId);
             return ResponseEntity.ok(response);}
     }
 
