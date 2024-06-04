@@ -119,6 +119,10 @@ img {
     margin-bottom: 20px;
     flex-wrap: wrap; /* 포스터가 한 줄에 넘치면 다음 줄로 이동하도록 설정 */
 }
+.ranking h2 {
+  margin-bottom: 20px;
+}
+
 .poster {
     margin: 10px;
     position: relative;
@@ -166,4 +170,6 @@ img {
   background-color: #e9e9e9;
   cursor: pointer;
 }
-
+h2 {
+  margin-bottom: 20px; /* 적절한 여백 크기를 선택합니다. */
+}

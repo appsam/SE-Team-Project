@@ -31,22 +31,29 @@ const Maincontent = () => {
     }, []);
 
 
-    useEffect(() => {
-          const memberId = localStorage.getItem('memberId');
-          // 추천 TOP4 포스터와 영화 ID 가져오기
-          axios
-            .get(`http://localhost:8080/api/recommend/${memberId}`)
-            .then((res) => {
-              const recommendPostersWithIds = res.data.map((item) => ({
-                poster: item.poster,
-                movieId: item.movieId,
-              }));
-              setRecommend(recommendPostersWithIds);
-            })
-            .catch((error) => {
-              console.error('추천 TOP4 포스터 가져오기 에러:', error);
-            });
-        }, []);
+useEffect(() => {
+  const memberId = localStorage.getItem('memberId');
+  // 추천 TOP4 포스터와 영화 ID 가져오기
+  axios
+    .get(`http://localhost:8080/api/recommend/${memberId}`)
+    .then((res) => {
+      const recommendPostersWithIds = res.data
+        .filter(item => item.poster) // 포스터 이미지가 있는 항목만 필터링
+        .map((item) => ({
+          poster: item.poster,
+          movieId: item.movieId,
+        }));
+
+      // 이미지가 있는 영화들만 선택
+      const moviesWithPosters = recommendPostersWithIds.slice(0, 4);
+
+      setRecommend(moviesWithPosters);
+    })
+    .catch((error) => {
+      console.error('추천 TOP4 포스터 가져오기 에러:', error);
+    });
+}, []);
+
 
   const testClick = (movie) => {
         console.log(movie);
