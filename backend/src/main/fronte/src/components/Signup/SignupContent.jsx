@@ -123,11 +123,11 @@ return (
               />
             </div>
           </div>
-          <div className="btn">
-            <button onClick={() => setShowModal(true)}>선호 장르 선택</button>
+          <div className="genrebtn">
+            <button className="genre-select-button" onClick={() => setShowModal(true)}>선호 장르 선택</button>
           </div>
           <div className="btn">
-            <button onClick={onClickJoin}>가입하기</button>
+            <button className="join-button" onClick={onClickJoin}>가입하기</button>
           </div>
           <div className="already-member">
             이미 가입하셨나요? <button className="login-button" onClick={handleLoginClick}>로그인</button>
